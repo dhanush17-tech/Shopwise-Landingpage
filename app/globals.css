@@ -17,6 +17,7 @@
 }
 
 body {
+overflow-x: hidden;
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
@@ -38,3 +39,4 @@ body {
 .btn-sm {
     @apply px-4 py-2 shadow;
 }
+ 

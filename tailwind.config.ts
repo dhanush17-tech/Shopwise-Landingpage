@@ -20,6 +20,7 @@ const config = {
     extend: {
 backgroundImage: {
         'radial-gradient': "radial-gradient(circle, transparent 0%, #131325 60%, #131325 100%)",
+  "page-gradient":"radial-gradient(circle, #131325 0%, #131325 60%, #131325 100%)"
       },      colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

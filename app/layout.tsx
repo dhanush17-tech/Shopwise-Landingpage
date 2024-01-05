@@ -22,14 +22,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} `}>
-        <div className=" ">
+      <body className={`${inter.variable} bg-page-gradient `}>
+        <Header />
 
-          <Header />
-          
-
-          {children}
-        </div>
+        {children}
       </body>
     </html>
   );

@@ -17,8 +17,8 @@ export default function Logo() {
             r="79.941%"
             id="footer-logo"
           >
-            <stop stopColor="#4FD1C5" offset="0%" />
-            <stop stopColor="#81E6D9" offset="25.871%" />
+            <stop stopColor="#116bee" offset="0%" />
+            <stop stopColor="#116bee" offset="25.871%" />
             <stop stopColor="#338CF5" offset="100%" />
           </radialGradient>
         </defs>
