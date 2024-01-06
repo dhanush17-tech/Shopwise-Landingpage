@@ -4,10 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGooglePlay,
   faProductHunt,
+  faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import {
   AnimatePresence,
   motion,
+  motionValue,
   useInView,
   useMotionValue,
   useTransform,
@@ -26,6 +28,9 @@ export default function HeroSection({ signedIn }: { signedIn: boolean }) {
   const handleScroll = () => {
     const position = window.pageYOffset;
     scrollY.set(position);
+    if (position <= 20) {
+      translateYIcon.set(30);
+    }
     setIsInMockUpView(rotateX.get() < 20);
     console.log(isInMockUpView);
     console.log(position); // Check if this logs the scroll position
@@ -55,6 +60,11 @@ export default function HeroSection({ signedIn }: { signedIn: boolean }) {
   };
   const [count, setCount] = useState(0);
   const targetCount = 200; // The target number you want to reach
+  const translateYIcon = useMotionValue(0);
+  const combinedTranslateYIcon = useTransform(
+    translateYIcon,
+    (value) => value - 30
+  );
 
   useEffect(() => {
     // Set an interval to update the count
@@ -73,7 +83,7 @@ export default function HeroSection({ signedIn }: { signedIn: boolean }) {
   }, []);
 
   return (
-    <div className=" overflow-auto  top-0 mx-auto w-full px-6 h-[90vh] md:h-[100vh]  flex flex-col justify-center lg:px-8">
+    <div className=" overflow-auto  top-0 mx-auto w-full px-6   h-[100vh]  flex flex-col justify-center lg:px-8">
       <div className="mx-auto max-w-full  text-center">
         <motion.div
           initial="hidden"
@@ -153,7 +163,14 @@ export default function HeroSection({ signedIn }: { signedIn: boolean }) {
           </motion.div>
         </motion.div>
       </div>
-
+      {/* <motion.div style={{ translateY: combinedTranslateYIcon }}>
+        <Link href={"https://twitter.com/geeky_dan"}>
+          <FontAwesomeIcon
+            className="text-4xl     text-center self-center w-full mt-8  ]  "
+            icon={faXTwitter}
+          />
+        </Link>
+      </motion.div> */}
       <div
         style={{ backgroundImage: "url('https://yashverma.me/grid.svg')" }}
         className="absolute top-0 left-0 z-[-2] h-screen w-full opacity-50 "
