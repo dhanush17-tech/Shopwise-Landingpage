@@ -5,25 +5,31 @@ import {
   faGooglePlay,
   faProductHunt,
 } from "@fortawesome/free-brands-svg-icons";
-import { AnimatePresence, motion, useInView, useMotionValue, useTransform } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useInView,
+  useMotionValue,
+  useTransform,
+} from "framer-motion";
 import Link from "next/link";
 import style from "./hero.module.css";
 import Background from "./background";
 import { cn } from "@/app/lib/utils";
 
 import { ContainerScroll } from "./mockup";
- 
 
 export default function HeroSection({ signedIn }: { signedIn: boolean }) {
-
   const scrollY = useMotionValue(0); // MotionValue for scroll position
 
   // Handle scroll and update scrollY MotionValue
- const handleScroll = () => {
-   const position = window.pageYOffset;
-   scrollY.set(position);
-   console.log(position); // Check if this logs the scroll position
- };
+  const handleScroll = () => {
+    const position = window.pageYOffset;
+    scrollY.set(position);
+    setIsInMockUpView(rotateX.get() < 20);
+    console.log(isInMockUpView);
+    console.log(position); // Check if this logs the scroll position
+  };
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -31,14 +37,15 @@ export default function HeroSection({ signedIn }: { signedIn: boolean }) {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  const [isInMockUpView, setIsInMockUpView] = useState(false);
 
   // Define motion values
   // Adjust the following ranges as per your page's scroll length and desired effect
-  const rotateX = useTransform(scrollY, [0, 120], [40, 0]);
-  const translateY = useTransform(scrollY, [0, 200], ["40%", "0%"]);
+  const rotateX = useTransform(scrollY, [0, 300], [40, 0]);
+  const translateY = useTransform(scrollY, [0, 120], ["0%", "0%"]);
 
+  const opacity = useTransform(scrollY, [0, 120], [1, 0]);
 
-  
   const ref = React.useRef(null);
   const isInView = useInView(ref) as boolean;
 
@@ -46,9 +53,27 @@ export default function HeroSection({ signedIn }: { signedIn: boolean }) {
     hidden: { opacity: 0, y: -10 },
     show: { opacity: 1, y: 0, transition: { type: "spring" } },
   };
+  const [count, setCount] = useState(0);
+  const targetCount = 200; // The target number you want to reach
+
+  useEffect(() => {
+    // Set an interval to update the count
+    const interval = setInterval(() => {
+      setCount((prevCount) => {
+        if (prevCount < targetCount) {
+          return prevCount + 1; // Increment the count
+        } else {
+          clearInterval(interval); // Clear the interval when target is reached
+          return prevCount;
+        }
+      });
+    }, 4); // Adjust the interval time as needed
+
+    return () => clearInterval(interval); // Clean up interval on component unmount
+  }, []);
 
   return (
-    <div  className=" overflow-auto  top-0 mx-auto w-full px-6 h-[100vh] flex flex-col justify-center lg:px-8">
+    <div className=" overflow-auto  top-0 mx-auto w-full px-6 h-[90vh] md:h-[100vh]  flex flex-col justify-center lg:px-8">
       <div className="mx-auto max-w-full  text-center">
         <motion.div
           initial="hidden"
@@ -56,6 +81,7 @@ export default function HeroSection({ signedIn }: { signedIn: boolean }) {
           ref={ref}
           animate={isInView ? "show" : "hidden"}
           viewport={{ once: true }}
+          style={{ opacity: opacity }}
           variants={{
             hidden: {},
             show: {
@@ -67,30 +93,58 @@ export default function HeroSection({ signedIn }: { signedIn: boolean }) {
         >
           <motion.h1
             variants={FADE_DOWN_ANIMATION_VARIANTS}
-            className="space-x-4 font-headingAlt text-5xl font-bold tracking-tight sm:text-7xl"
+            className="font-headingAlt font-bold tracking-tight"
+            style={{
+              lineHeight: "1.2",
+              fontSize: "clamp(2.5rem, 5vw + 1rem, 4rem)", // Adjust the values according to your design
+            }}
           >
-            <span>Shop the</span>
+            <span>Shop the</span>{" "}
             <span className={cn(style.magicText, "inline")}>Right Deals</span>
             <span className="md:mx-1"></span> at the right time
           </motion.h1>
+
           <motion.p
             variants={FADE_DOWN_ANIMATION_VARIANTS}
-            className="mt-6 text-lg leading-8 "
+            style={{
+              lineHeight: "1.2",
+              fontSize: "clamp(0.8rem, 2.5vw, 1.2rem)", // Adjust the values according to your design
+            }}
+            className="leading-8 mt-5 "
           >
             Set a price alert to your bucket list and get them at the right time
+          </motion.p>
+          <motion.p
+            variants={FADE_DOWN_ANIMATION_VARIANTS}
+            style={{
+              lineHeight: "1.2",
+              fontSize: "clamp(1.5rem, 2.5vw, 2rem)", // Adjust the values according to your design
+            }}
+            className="leading-8 mt-8  text-blue-300 font-bold"
+          >
+            {count}+ Downloads
           </motion.p>
 
           <motion.div
             variants={FADE_DOWN_ANIMATION_VARIANTS}
+            style={{ fontSize: "clamp(0.8rem, 2.5vw, 1.2rem)" }}
             className="mt-10 flex items-center justify-center gap-x-10 "
           >
-            <div className="btn bg-white font-bold text-blue-500 space-x-5">
-              <FontAwesomeIcon className="mr-2" icon={faGooglePlay} />
-              Download Now
-            </div>
+            <Link
+              href={
+                "https://play.google.com/store/apps/details?id=com.priceTracker.shopwise&pcampaignid=web_share"
+              }
+            >
+              {" "}
+              <div className="btn bg-white font-bold text-blue-500 space-x-5">
+                <FontAwesomeIcon className="mr-2" icon={faGooglePlay} />
+                Download Now
+              </div>
+            </Link>
 
             <Link
-              href="https://github.com/dhravya/dump.place"
+              href="https://www.producthunt.com/products/shopwise"
+              style={{ fontSize: "clamp(0.8rem, 2.5vw, 1.2rem)" }}
               className="bg-transparent flex justify-center align-center gap-2 text-xl"
             >
               Upvote on
@@ -104,11 +158,15 @@ export default function HeroSection({ signedIn }: { signedIn: boolean }) {
         style={{ backgroundImage: "url('https://yashverma.me/grid.svg')" }}
         className="absolute top-0 left-0 z-[-2] h-screen w-full opacity-50 "
       >
-        <div className="absolute top-0 left-0 z-10 h-screen w-full bg-radial-gradient"></div>
+        <div className="absolute top-0 left-0  h-screen w-full bg-radial-gradient"></div>
       </div>
 
-      <div className=" absolute left-0 bottom-0  ">
-        <ContainerScroll  rotate={rotateX} translate={translateY}/>
+      <div className=" absolute translate-y-1/3 left-0 bottom-0  ">
+        <ContainerScroll
+          rotate={rotateX}
+          translate={translateY}
+          isInView={isInMockUpView}
+        />
       </div>
 
       <div className="mt-16 flow-root sm:mt-24">
