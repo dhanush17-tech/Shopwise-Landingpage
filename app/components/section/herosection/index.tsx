@@ -59,7 +59,7 @@ export default function HeroSection({ signedIn }: { signedIn: boolean }) {
     show: { opacity: 1, y: 0, transition: { type: "spring" } },
   };
   const [count, setCount] = useState(0);
-  const targetCount = 200; // The target number you want to reach
+  const targetCount = 350; // The target number you want to reach
   const translateYIcon = useMotionValue(0);
   const combinedTranslateYIcon = useTransform(
     translateYIcon,
@@ -84,7 +84,14 @@ export default function HeroSection({ signedIn }: { signedIn: boolean }) {
 
   return (
     <div className=" overflow-auto  top-0 mx-auto w-full px-6   h-[100vh]  flex flex-col justify-center lg:px-8">
-      <div className="mx-auto max-w-full  text-center">
+      <div className=" absolute translate-y-1/3 left-0 bottom-0  ">
+        <ContainerScroll
+          rotate={rotateX}
+          translate={translateY}
+          isInView={isInMockUpView}
+        />
+      </div>
+      <div className="mx-auto max-w-full z-20   text-center">
         <motion.div
           initial="hidden"
           className="max-w-2xl"
@@ -176,14 +183,6 @@ export default function HeroSection({ signedIn }: { signedIn: boolean }) {
         className="absolute top-0 left-0 z-[-2] h-screen w-full opacity-50 "
       >
         <div className="absolute top-0 left-0  h-screen w-full bg-radial-gradient"></div>
-      </div>
-
-      <div className=" absolute translate-y-1/3 left-0 bottom-0  ">
-        <ContainerScroll
-          rotate={rotateX}
-          translate={translateY}
-          isInView={isInMockUpView}
-        />
       </div>
 
       <div className="mt-16 flow-root sm:mt-24">

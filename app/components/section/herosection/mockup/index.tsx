@@ -14,24 +14,19 @@ export const ContainerScroll = ({
   translate: any;
   isInView: any;
 }) => {
-  // ... existing code ...
-
   const [canAutoplay, setCanAutoplay] = useState(false);
-  const [autoplayFailed, setAutoplayFailed] = useState(false);
 
   useEffect(() => {
+    // On iOS, video needs to be muted to autoplay and should allow inline playback
     const video = document.createElement("video");
-    video.src = "./video.mp4";
-    video.muted = false;
-    video.onplay = () => {
-      setCanAutoplay(true);
-      setAutoplayFailed(false);
-    };
-    video.onerror = () => setAutoplayFailed(true);
-    video.play().catch(() => {
-      setCanAutoplay(false);
-      setAutoplayFailed(true);
-    });
+    video.src = "./mobile_promo.mp4";
+    video.muted = true; // Ensure the video is muted
+    video.setAttribute("playsinline", ""); // Important for iOS to allow inline playback
+
+    video
+      .play()
+      .then(() => setCanAutoplay(true))
+      .catch(() => setCanAutoplay(false));
 
     return () => {
       video.pause();
@@ -49,9 +44,8 @@ export const ContainerScroll = ({
         translate={translate}
         isInView={isInView}
         canAutoplay={canAutoplay}
-        autoplayFailed={autoplayFailed}
       />
-      <div className="h-[25%] md:h-[25%]"></div>
+      {/* Additional content here if needed */}
     </div>
   );
 };
@@ -61,26 +55,29 @@ export const Card = ({
   translate,
   isInView,
   canAutoplay,
-  autoplayFailed,
 }: {
   rotate: any;
   translate: any;
   isInView: any;
   canAutoplay: any;
-  autoplayFailed: any;
 }) => {
+  const [isButtonVisible, setIsButtonVisible] = useState(true);
+
   // Function to manually play the video
   const handlePlayVideo = () => {
     const videoElement = document.querySelector(
       ".video-element"
     ) as HTMLVideoElement;
-    videoElement!.play();
+    if (videoElement) {
+      videoElement.play();
+      setIsButtonVisible(false);
+    }
   };
-  const [isButtonVisible, setIsButtonVisible] = useState(true);
+
   return (
     <motion.div
       style={{ rotateX: rotate, translateY: translate }}
-      className="mt-20 transform z-[100] mx-auto border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] aspect-ratio w-full max-w-[300px]"
+      className="mt-[30%] md:mt-20 transform z-[100] mx-auto border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] aspect-ratio w-full max-w-[300px]"
     >
       {/* ... existing divs ... */}
       <div className="rounded-[2rem] overflow-hidden bg-white aspect-ratio w-full">
@@ -89,30 +86,29 @@ export const Card = ({
             <video
               src="./video.mp4"
               autoPlay
-              className="block object-cover h-full aspect-ratio-[9/16] video-element"
+              className="block w-full h-auto video-element"
             ></video>
           ) : (
             <div className="relative">
               <video
                 src="./video.mp4"
                 autoPlay
-                className="block object-cover h-full aspect-ratio-[9/16] video-element"
+                className="block w-full h-auto video-element"
               ></video>
-              {autoplayFailed &&
-                (isButtonVisible ? (
-                  <button
-                    onClick={() => {
-                      handlePlayVideo();
-                      setIsButtonVisible(false);
-                    }}
-                    className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-gray-500/50 p-2 flex items-center justify-center"
-                  >
-                    <FontAwesomeIcon
-                      className="text-xl text-white"
-                      icon={faPlay}
-                    />
-                  </button>
-                ) : null)}
+              {isButtonVisible ? (
+                <button
+                  onClick={() => {
+                    handlePlayVideo();
+                    setIsButtonVisible(false);
+                  }}
+                  className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-gray-500/50 p-2 flex items-center justify-center"
+                >
+                  <FontAwesomeIcon
+                    className="text-xl text-white"
+                    icon={faPlay}
+                  />
+                </button>
+              ) : null}
             </div>
           )
         ) : (
@@ -120,7 +116,7 @@ export const Card = ({
             src="/shopwise.jpeg"
             width={300}
             height={500}
-            className="block object-cover w-full h-full"
+            className="block w-full h-auto"
             alt="Mockup Image"
           />
         )}

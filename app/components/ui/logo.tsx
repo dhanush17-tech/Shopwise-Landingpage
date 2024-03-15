@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 
 export default function Logo() {
@@ -10,12 +11,13 @@ export default function Logo() {
       >
         <defs>
           <radialGradient
-            cx="21.152%"
-            cy="86.063%"
-            fx="21.152%"
-            fy="86.063%"
-            r="79.941%"
+            cx="50%"
+            cy="50%"
+            fx="50%"
+            fy="50%"
+            r="50%"
             id="footer-logo"
+            gradientUnits="userSpaceOnUse"
           >
             <stop stopColor="#116bee" offset="0%" />
             <stop stopColor="#116bee" offset="25.871%" />
@@ -30,7 +32,16 @@ export default function Logo() {
           fillRule="nonzero"
         />
       </svg>
-      <p className="absolute top-[14%] left-[32%] font-bold text-white">S</p>
+      <style jsx>{`
+        p {
+          position: absolute;
+          top: 14%;
+          left: 32%;
+          font-weight: bold;
+          color: white;
+        }
+      `}</style>
+      <p>S</p>
     </Link>
   );
 }

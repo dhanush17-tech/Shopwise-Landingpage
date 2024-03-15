@@ -26,10 +26,10 @@ export default function Header() {
             <ul className="flex grow justify-end flex-wrap items-center">
               <li>
                 <Link
-                  href="https://shopwise.tech/docs"
+                  href="https://x.com/geeky_dan/status/1721938472938946876"
                   className="font-medium  text-gray-200 hover:text-blue-400 px-4 py-3 flex items-center transition duration-500 ease-in-out"
                 >
-                  Developers
+                  Meet the Developer
                 </Link>
               </li>
               <li>
